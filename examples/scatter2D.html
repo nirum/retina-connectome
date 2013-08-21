@@ -1,0 +1,24 @@
+<!DOCTYPE html >
+<html >
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>3D Scatter Plot</title>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  </head>
+  <body>
+			<svg id="scatterPlot" width="550" height="100">
+    <script>
+		  d3.select("body").append("p").text("Simple scatter plot");
+
+			var dataset = [[5, 20], [480, 90], [250, 50], [100, 33], [330, 95],
+									 	 [410, 12], [475, 44], [25, 67], [85, 21], [220, 88]];
+
+			d3.select("#scatterPlot").selectAll("circle").data(dataset).enter().append("circle")
+				.attr("cx", function(d) { return d[0]+25; })
+				.attr("cy", function(d) { return d[1]; })
+				.attr("r", function(d) { return Math.sqrt(100-d[1]); });
+
+    </script>
+  </body>
+</html>
