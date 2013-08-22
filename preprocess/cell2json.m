@@ -10,7 +10,7 @@ ids = kn_e2006_ALLSKELETONS_FINAL2012_cellIDs_sortedByType_MAR2013;
 fprintf('Done.\n');
 
 %% Convert each cell's nodes and edges to a JSON object
-for id = 101:length(ids)
+for id = 1:100
 
     % id
     cellIdx = ids(id);
@@ -23,13 +23,14 @@ for id = 101:length(ids)
 
     % edges
     for edgeIdx = 1:size(cells{cellIdx}.edges,1)
-        obj.edges{edgeIdx} = cells{cellIdx}.edges(edgeIdx,:);
+        edgeIndices = cells{cellIdx}.edges(edgeIdx,:);
+        obj.edges{edgeIdx} = struct('x', cells{cellIdx}.nodes(edgeIndices(1),1:3), 'y', cells{cellIdx}.nodes(edgeIndices(2),1:3));
     end
 
     % save to JSON
     savejson('', obj, sprintf('../json/cell%i.json',id));
 
     % update
-    progressbar(cellIdx,length(ids));
+    progressbar(id,100); %length(ids));
 
 end
