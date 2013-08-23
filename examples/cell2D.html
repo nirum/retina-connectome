@@ -9,8 +9,13 @@
 		<script type="text/javascript" src="../css/cell2D.css"></script>
   </head>
   <body>
-			<h2>Cell 2</h2>
+			<h2 id="title">Cell</h2>
 			<p id="loading">Loading ...</p>
-			<svg id="scatterPlot">
+			<svg id="scatterPlot"></svg>
+			<form name="cellform">
+					<label>Choose cell (1-25):</label>
+					<input type="number" name="cellID">
+					<input type="button" OnClick="loadCell()" value="Load">
+			</form>
   </body>
 </html>

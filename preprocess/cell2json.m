@@ -5,32 +5,42 @@
 %% Load cell data
 clc; fprintf('Loading... ');
 clear; load('../raw/nature2013.mat');
-cells = kn_e2006_ALLSKELETONS_FINAL2012;
-ids = kn_e2006_ALLSKELETONS_FINAL2012_cellIDs_sortedByType_MAR2013;
+skeletons = kn_e2006_ALLSKELETONS_FINAL2012;
+cellIds   = kn_e2006_ALLSKELETONS_FINAL2012_cellIDs;
+matrixPos = kn_e2006_ALLSKELETONS_FINAL2012_cellIDs_sortedByType_MAR2013;
 fprintf('Done.\n');
 
 %% Convert each cell's nodes and edges to a JSON object
-for id = 1:100
+for matrixId = 1:length(matrixPos);
 
-    % id
-    cellIdx = ids(id);
-    obj.id = cellIdx;
+    % get cell ID based on matrix position
+		cellIdx = matrixPos(matrixId);
+
+		% get skeletons associated with this cell ID
+		skeletonIds = find(cellIds == cellIdx);
+
+		if isempty(skeletonIds)
+				continue;
+		else
+				skeletonId = skeletonIds(1); % pick one skeleton to use ...
+		end
 
     % nodes
-    for nodeIdx = 1:size(cells{cellIdx}.nodes,1)
-        obj.nodes{nodeIdx} = cells{cellIdx}.nodes(nodeIdx,1:3);
-    end
+    %for nodeIdx = 1:size(skeletons{skeletonId}.nodes,1)
+        %obj.nodes{nodeIdx} = skeletons{skeletonId}.nodes(nodeIdx,1:3);
+    %end
 
     % edges
-    for edgeIdx = 1:size(cells{cellIdx}.edges,1)
-        edgeIndices = cells{cellIdx}.edges(edgeIdx,:);
-        obj.edges{edgeIdx} = struct('x', cells{cellIdx}.nodes(edgeIndices(1),1:3), 'y', cells{cellIdx}.nodes(edgeIndices(2),1:3));
+    for edgeIdx = 1:size(skeletons{skeletonId}.edges,1)
+        edgeIndices = skeletons{skeletonId}.edges(edgeIdx,:);
+        obj.edges{edgeIdx} = struct('x', skeletons{skeletonId}.nodes(edgeIndices(1),1:3), 'y', skeletons{skeletonId}.nodes(edgeIndices(2),1:3));
     end
 
     % save to JSON
-    savejson('', obj, sprintf('../json/cell%i.json',id));
+    savejson('', obj, sprintf('../json/cell%i.json',matrixId));
 
     % update
-    progressbar(id,100); %length(ids));
+    %progressbar(id,length(ids));
+		tcprintf('lightGray onRed', 'Cell %i of %i.\n', matrixId, length(matrixPos));
 
 end
