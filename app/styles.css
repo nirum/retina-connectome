@@ -1,3 +1,9 @@
 /*
  * Retina Connectome
  */
+
+// loading text
+.loading {
+		font-size: 20px;
+		color: red;
+}
