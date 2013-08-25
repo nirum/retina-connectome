@@ -7,8 +7,8 @@ angular.module('myApp.directives', [])
 
 	// constants
 	var margin = 20,
-		width = 300,
-		height = 500;
+		width = 600,
+		height = 600;
 
 	console.log('asdf');
 
@@ -34,30 +34,35 @@ angular.module('myApp.directives', [])
 						[0, 120],
 						[0, 80]
 				];
-				var xScale = d3.scale.linear().range([margin, width - margin]).domain(extent[0]);
-				var yScale = d3.scale.linear().range([margin, height - margin]).domain(extent[1]);
-				var zScale = d3.scale.linear().range([margin, height - margin]).domain(extent[2]);
 
 				// initialize axes
 				scope.xIdx = 0;
 				scope.yIdx = 1;
+				var xScale = d3.scale.linear().range([margin, width - margin]).domain(extent[scope.xIdx]);
+				var yScale = d3.scale.linear().range([margin, height - margin]).domain(extent[scope.yIdx]);
 
 				// watch for changing data
 				scope.$watch('edges', function(edgeData, oldData) {
+						scope.edges = edgeData;
+						update(edgeData);
+				});
+
+				var update = function(data) {
 
 						// do stuff
 						console.log('starting to render');
 
 						// remove everything
-						svg.selectAll('*').remove();
+						//svg.selectAll('*').remove();
 
 						// DATA JOIN
 						// join new edges with old ones, if any
-						var edges = svg.selectAll("line").data(edgeData);
+						var edges = svg.selectAll("line").data(data);
+						//console.log(data);
 
 						// UPDATE
 						// update old edges with 'update' style
-						edges.attr("stroke", "green"); //.transition().duration(500);
+						edges.transition().duration(500).attr("stroke", "green"); //.transition().duration(500);
 
 						// ENTER
 						// create new edges
@@ -73,17 +78,19 @@ angular.module('myApp.directives', [])
 
 						// EXIT
 						// remove old edges
-						console.log(edges.exit());
-						edges.exit().attr("stroke", "red").remove(); //.transition().duration(750).remove();
+						//console.log(edges.exit());
+						edges.exit().transition().duration(500).attr("stroke", "red").remove();
 
 
-				});
+				};
 
 				// watch for changing x-axis
 				scope.$watch('xaxis', function(newX, oldX) {
 						// do stuff
 						console.log('new x-axis!');
 						scope.xIdx = newX;
+						xScale = d3.scale.linear().range([margin, width - margin]).domain(extent[scope.xIdx]);
+						update(scope.edges);
 				});
 
 				// watch for changing y-axis
@@ -91,6 +98,8 @@ angular.module('myApp.directives', [])
 						// do stuff
 						console.log('new y-axis!');
 						scope.yIdx = newY;
+						yScale = d3.scale.linear().range([margin, height - margin]).domain(extent[scope.yIdx]);
+						update(scope.edges);
 				});
 		}
 	}
