@@ -1,39 +1,29 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="myApp">
 
    <head>
       <meta charset="utf-8">
       <title>Retina Connectome</title>
+
       <!-- Libraries -->
       <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
       <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
       <script type="text/javascript" src="bower_components/d3/d3.js"></script>
       <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
-      <script type="text/javascript" src="app/main.js"></script>
+
+			<!-- App -->
+      <script type="text/javascript" src="app/app.js"></script>
+      <script type="text/javascript" src="app/controllers.js"></script>
+      <script type="text/javascript" src="app/directives.js"></script>
+
       <!-- Stylesheets -->
       <link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
       <link type="text/css" rel="stylesheet" href="app/styles.css" />
    </head>
 
-   <body ng-controller="MainCtrl">
+   <body>
       <div class="container">
-         <div class="row">
-            <div class="col-md-4">
-								<!-- <p>Cell {{ cellID }} ({{ cellType }} cell)</p> -->
-								<p class="loading" ng-show="isLoading">LOADING</p>
-               <select ng-model="cellID">
-                  <option ng-repeat="cell in cells">{{ $index+1 }}</option>
-               </select>
-					 </div>
-            <div class="col-md-2">
-							 <button class="btn btn-default" ng-click="loadCell(cellID)">Load</button>
-            </div>
-         </div>
-				 <div class="row">
-						 <div class="col-lg-6">
-								<svg id="scatterPlot"></svg>
-						 </div>
-				 </div>
+					<div ng-view></div>
       </div>
    </body>
 
